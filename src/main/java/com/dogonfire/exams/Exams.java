@@ -88,7 +88,15 @@ public class Exams extends JavaPlugin
 		requiredExamScore = config.getInt("RequiredExamScore", 80);
 		debug = config.getBoolean("Debug", false);
 		shuffleQuestionOptions = config.getBoolean("ShuffleQuestionOptions", false);
-		endExamMessages = config.getStringList("EndExamMessages");
+		if(!config.getStringList("EndExamMessages").isEmpty())
+		{
+			endExamMessages = config.getStringList("EndExamMessages");
+		}
+		else
+		{
+			config.set("EndExamMessages", endExamMessages);
+			saveConfig();
+		}
 	}
 
 	public void saveSettings()

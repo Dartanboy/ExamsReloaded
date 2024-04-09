@@ -117,13 +117,14 @@ public class BlockListener implements Listener
         if (currentExam == null)
         {
             ExamManager.handleNewExamPrerequisites(player, examName);
-
+            event.setCancelled(true);
             return;
         }
 
         if (!currentExam.equals(examName))
         {
             Exams.sendInfo(event.getPlayer(), ChatColor.RED + "You are already signed up for the " + ChatColor.YELLOW + currentExam + ChatColor.RED + " exam!");
+            event.setCancelled(true);
             return;
         }
 
@@ -134,6 +135,7 @@ public class BlockListener implements Listener
                 if (!ExamManager.generateExam(player.getName(), examName))
                 {
                     player.sendMessage(ChatColor.RED + "ERROR: Could not generate a " + ChatColor.YELLOW + examName + ChatColor.RED + " exam!");
+                    event.setCancelled(true);
                     return;
                 }
 
