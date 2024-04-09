@@ -421,16 +421,8 @@ public class ExamManager
             msg = ChatColor.translateAlternateColorCodes('&', msg);
             msg = msg.replace("<score>", score + "");
             msg = msg.replace("<requiredScore>", Exams.instance().requiredExamScore + "");
+            Exams.sendMessage(playerName, msg);
         }
-
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "");
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "");
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "");
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "");
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "------------- Exam done -------------");
-        Exams.sendMessage(playerName, ChatColor.YELLOW + "");
-        Exams.sendMessage(playerName, ChatColor.AQUA + " Exam score:  " + ChatColor.YELLOW + score + ChatColor.AQUA + " points");
-        Exams.sendMessage(playerName, ChatColor.AQUA + " Points needed: " + ChatColor.YELLOW + Exams.instance().requiredExamScore + ChatColor.AQUA + " points");
 
         StudentManager.setLastExamTime(playerName);
 
