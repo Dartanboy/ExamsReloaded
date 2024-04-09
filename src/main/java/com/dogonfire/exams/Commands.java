@@ -340,7 +340,7 @@ public class Commands
     private boolean commandPluginInfo(CommandSender sender)
     {
         sender.sendMessage(ChatColor.YELLOW + "---------------- " + Exams.instance().getDescription().getFullName() + " ----------------");
-        sender.sendMessage(ChatColor.AQUA + "By DogOnFire");
+        sender.sendMessage(ChatColor.AQUA + "By " + Exams.instance().getDescription().getAuthors());
         sender.sendMessage(ChatColor.AQUA + "");
         sender.sendMessage(ChatColor.AQUA + "There are currently " + ChatColor.WHITE + ExamManager.getExams().size() + ChatColor.AQUA + " exams in " + Exams.instance().serverName);
         sender.sendMessage(ChatColor.AQUA + "");
@@ -355,9 +355,9 @@ public class Commands
         sender.sendMessage(ChatColor.AQUA + "/exams" + ChatColor.WHITE + " - Basic info");
         //sender.sendMessage(ChatColor.AQUA + "/exams list" + ChatColor.WHITE + " - List of all exams");
         sender.sendMessage(ChatColor.AQUA + "/exams a" + ChatColor.WHITE + " - Answer A to an exam question");
-        sender.sendMessage(ChatColor.AQUA + "/exams b" + ChatColor.WHITE + " - Answer A to an exam question");
-        sender.sendMessage(ChatColor.AQUA + "/exams c" + ChatColor.WHITE + " - Answer A to an exam question");
-        sender.sendMessage(ChatColor.AQUA + "/exams d" + ChatColor.WHITE + " - Answer A to an exam question");
+        sender.sendMessage(ChatColor.AQUA + "/exams b" + ChatColor.WHITE + " - Answer B to an exam question");
+        sender.sendMessage(ChatColor.AQUA + "/exams c" + ChatColor.WHITE + " - Answer C to an exam question");
+        sender.sendMessage(ChatColor.AQUA + "/exams d" + ChatColor.WHITE + " - Answer D to an exam question");
         if ((sender.isOp()) || (sender.hasPermission("exams.reload")))
         {
             sender.sendMessage(ChatColor.AQUA + "/exams reload" + ChatColor.WHITE + " - Reloads the Exams system");
