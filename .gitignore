@@ -13,6 +13,7 @@ dependency-reduced-pom.xml
 /.settings/
 
 # Specific to IDEA
+.idea
 .idea/
 exams.iml
 
