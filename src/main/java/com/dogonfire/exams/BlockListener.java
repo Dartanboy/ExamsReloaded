@@ -13,12 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockListener implements Listener
 {
-	static private BlockListener	instance;
+    static private BlockListener instance;
 
-	public BlockListener()
-	{
-		instance = this;
-	}
+    public BlockListener()
+    {
+        instance = this;
+    }
 
     private void destroySign(Block signBlock)
     {
@@ -26,7 +26,8 @@ public class BlockListener implements Listener
         signBlock.setType(Material.AIR);
 
         // Drop it
-        switch (signType) {
+        switch (signType)
+        {
             case OAK_WALL_SIGN:
                 signBlock.getWorld().dropItem(signBlock.getLocation(), new ItemStack(Material.OAK_SIGN, 1));
                 break;
@@ -56,106 +57,104 @@ public class BlockListener implements Listener
         }
     }
 
-	@EventHandler
-	public void onSignChange(SignChangeEvent event)
-	{
-		Player player = event.getPlayer();
+    @EventHandler
+    public void onSignChange(SignChangeEvent event)
+    {
+        Player player = event.getPlayer();
 
-		if (!ExamManager.isExamSign(event.getBlock(), event.getLines()))
-		{
-			return;
-		}
+        if (!ExamManager.isExamSign(event.getBlock(), event.getLines()))
+        {
+            return;
+        }
 
-		if (!player.isOp() && !PermissionsManager.hasPermission(player, "exams.place"))
-		{
-			event.setCancelled(true);
+        if (!player.isOp() && !PermissionsManager.hasPermission(player, "exams.place"))
+        {
+            event.setCancelled(true);
             destroySign(event.getBlock());
 
-			Exams.sendInfo(player, ChatColor.RED + "You cannot place Exam signs");
+            Exams.sendInfo(player, ChatColor.RED + "You cannot place Exam signs");
 
-			return;
-		}
+            return;
+        }
 
-		if (!ExamManager.handleNewExamSign(event))
-		{
-			event.setCancelled(true);
+        if (!ExamManager.handleNewExamSign(event))
+        {
+            event.setCancelled(true);
             destroySign(event.getBlock());
-		}
-	}
+        }
+    }
 
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent event)
-	{
-		Player player = event.getPlayer();
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event)
+    {
+        Player player = event.getPlayer();
 
-		if (!ExamManager.isExamSign(event.getClickedBlock()))
-		{
-			return;
-		}
+        if (!ExamManager.isExamSign(event.getClickedBlock()))
+        {
+            return;
+        }
 
-		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-		{
-			return;
-		}
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+        {
+            return;
+        }
 
-		String examName = ExamManager.getExamFromSign(event.getClickedBlock());
+        String examName = ExamManager.getExamFromSign(event.getClickedBlock());
 
-		if (examName == null)
-		{
-			return;
-		}
-		
-		if (!ExamManager.examExists(examName))
-		{
-			event.getPlayer().sendMessage(ChatColor.RED + "There is no exam called '" + examName + "'!");
-			return;
-		}
-		
-		String currentExam = StudentManager.getExamForStudent(player.getName());
+        if (examName == null)
+        {
+            return;
+        }
 
-		if(currentExam==null)
-		{
-			ExamManager.handleNewExamPrerequisites(player, examName);
-			
-			return;
-		}
+        if (!ExamManager.examExists(examName))
+        {
+            event.getPlayer().sendMessage(ChatColor.RED + "There is no exam called '" + examName + "'!");
+            return;
+        }
 
-		if (!currentExam.equals(examName))
-		{
-			Exams.sendInfo(event.getPlayer(), ChatColor.RED + "You are already signed up for the " + ChatColor.YELLOW + currentExam + ChatColor.RED + " exam!");
-			return;
-		}
-		
-		if (ExamManager.isExamOpen(player.getWorld(), examName))
-		{
-			if (!StudentManager.isDoingExam(player.getName()))
-			{
-				if (!ExamManager.generateExam(player.getName(), examName))
-				{
-					player.sendMessage(ChatColor.RED + "ERROR: Could not generate a " + ChatColor.YELLOW + examName + ChatColor.RED + " exam!");
-					return;
-				}
+        String currentExam = StudentManager.getExamForStudent(player.getName());
 
-				Exams.sendToAll(ChatColor.AQUA + player.getName() + " started on the exam for " + ChatColor.YELLOW + examName + ChatColor.AQUA + "!");
-				Exams.sendMessage(player.getName(), "You started on the " + ChatColor.YELLOW + examName + ChatColor.AQUA + " exam.");
-				Exams.sendMessage(player.getName(), "Click on the sign again to repeat the exam question.");
-				Exams.sendMessage(player.getName(), "Good luck!");
+        if (currentExam == null)
+        {
+            ExamManager.handleNewExamPrerequisites(player, examName);
 
-				ExamManager.nextExamQuestion(player.getName());
-			}
+            return;
+        }
 
-			ExamManager.doExamQuestion(player.getName());
-		}
-		else if (!StudentManager.isDoingExam(player.getName()))
-		{
-			Exams.sendInfo(event.getPlayer(), ChatColor.RED + "The exam has not started yet!");
-			Exams.sendInfo(event.getPlayer(), ChatColor.RED + "Please come back at " + ChatColor.YELLOW + ExamManager.getExamStartTime(examName) + ChatColor.RED + " Minecraft time");
-		}
-		else
-		{
-			Exams.sendInfo(event.getPlayer(), ChatColor.RED + "The exam has ended!");
-			ExamManager.calculateExamResult(event.getPlayer().getName());
-			StudentManager.removeStudent(player.getName());
-		}
-	}
+        if (!currentExam.equals(examName))
+        {
+            Exams.sendInfo(event.getPlayer(), ChatColor.RED + "You are already signed up for the " + ChatColor.YELLOW + currentExam + ChatColor.RED + " exam!");
+            return;
+        }
+
+        if (ExamManager.isExamOpen(player.getWorld(), examName))
+        {
+            if (!StudentManager.isDoingExam(player.getName()))
+            {
+                if (!ExamManager.generateExam(player.getName(), examName))
+                {
+                    player.sendMessage(ChatColor.RED + "ERROR: Could not generate a " + ChatColor.YELLOW + examName + ChatColor.RED + " exam!");
+                    return;
+                }
+
+                Exams.sendToAll(ChatColor.AQUA + player.getName() + " started on the exam for " + ChatColor.YELLOW + examName + ChatColor.AQUA + "!");
+                Exams.sendMessage(player.getName(), "You started on the " + ChatColor.YELLOW + examName + ChatColor.AQUA + " exam.");
+                Exams.sendMessage(player.getName(), "Click on the sign again to repeat the exam question.");
+                Exams.sendMessage(player.getName(), "Good luck!");
+
+                ExamManager.nextExamQuestion(player.getName());
+            }
+
+            ExamManager.doExamQuestion(player.getName());
+        } else if (!StudentManager.isDoingExam(player.getName()))
+        {
+            Exams.sendInfo(event.getPlayer(), ChatColor.RED + "The exam has not started yet!");
+            Exams.sendInfo(event.getPlayer(), ChatColor.RED + "Please come back at " + ChatColor.YELLOW + ExamManager.getExamStartTime(examName) + ChatColor.RED + " Minecraft time");
+        } else
+        {
+            Exams.sendInfo(event.getPlayer(), ChatColor.RED + "The exam has ended!");
+            ExamManager.calculateExamResult(event.getPlayer().getName());
+            StudentManager.removeStudent(player.getName());
+        }
+    }
 }

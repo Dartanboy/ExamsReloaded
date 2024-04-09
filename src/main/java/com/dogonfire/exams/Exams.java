@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -25,6 +26,8 @@ public class Exams extends JavaPlugin
 	public boolean				examRanksEnabled		= true;
 
 	public String				serverName				= "Your Server";
+
+	public List<String>			endExamMessages			= new ArrayList<>();
 	public String				languageFilename		= "english.yml";
 
 	public int					minExamTime				= 60;
@@ -85,6 +88,7 @@ public class Exams extends JavaPlugin
 		requiredExamScore = config.getInt("RequiredExamScore", 80);
 		debug = config.getBoolean("Debug", false);
 		shuffleQuestionOptions = config.getBoolean("ShuffleQuestionOptions", false);
+		endExamMessages = config.getStringList("EndExamMessages");
 	}
 
 	public void saveSettings()
@@ -94,6 +98,7 @@ public class Exams extends JavaPlugin
 		config.set("RequiredExamScore", requiredExamScore);
 		config.set("Debug", debug);
 		config.set("ShuffleQuestionOptions", shuffleQuestionOptions);
+		config.set("EndExamMessages", endExamMessages);
 
 		saveConfig();
 	}
@@ -101,6 +106,14 @@ public class Exams extends JavaPlugin
 	public void onEnable()
 	{
 		instance = this;
+
+		endExamMessages.add("");
+		endExamMessages.add("");
+		endExamMessages.add("");
+		endExamMessages.add("&e------------- Exam done -------------");
+		endExamMessages.add("");
+		endExamMessages.add("&b Exam Score: &e<score> &bpoints.");
+		endExamMessages.add("&b Points Needed: &e<requiredScore> &bpoints.");
 
 		examManager = new ExamManager();
 		studentManager = new StudentManager();
@@ -115,67 +128,6 @@ public class Exams extends JavaPlugin
 		studentManager.load();
 
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
-
-		/*
-		try
-		{
-			Metrics metrics = new Metrics(this);
-
-			metrics.addCustomData(new Metrics.Plotter("Using PermissionsBukkit")
-			{
-				public int getValue()
-				{
-					if (getPermissionsManager().getPermissionPluginName().equals("PermissionsBukkit"))
-					{
-						return 1;
-					}
-					return 0;
-				}
-			});
-
-			metrics.addCustomData(new Metrics.Plotter("Using PermissionsEx")
-			{
-				public int getValue()
-				{
-					if (getPermissionsManager().getPermissionPluginName().equals("PermissionsEx"))
-					{
-						return 1;
-					}
-					return 0;
-				}
-			});
-
-			metrics.addCustomData(new Metrics.Plotter("Using GroupManager")
-			{
-				public int getValue()
-				{
-					if (Exams.this.getPermissionsManager().getPermissionPluginName().equals("GroupManager"))
-					{
-						return 1;
-					}
-					return 0;
-				}
-			});
-
-			metrics.addCustomData(new Metrics.Plotter("Using bPermissions")
-			{
-				public int getValue()
-				{
-					if (Exams.this.getPermissionsManager().getPermissionPluginName().equals("bPermissions"))
-					{
-						return 1;
-					}
-					return 0;
-				}
-			});
-
-			metrics.start();
-		}
-		catch (Exception ex)
-		{
-			log("Failed to submit metrics :-(");
-		}
-		*/
 	}
 
 	public void onDisable()
