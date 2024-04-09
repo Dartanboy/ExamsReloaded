@@ -1,3 +1,7 @@
+Notice
+-------------------------------------------------
+Dartanboy does not update this file.
+
 0.1.9
 -------------------------------------------------
 * Fixed config.yml being overwritten at server restart 
